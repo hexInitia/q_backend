@@ -100,6 +100,24 @@ class CommentsReadView(APIView):
         })
         if data.is_valid():
             print(data.validated_data)
+            device_id = data.validated_data['device_id']
+            comments = Comment.objects.filter(
+                original_quote=ObjectId(data.validated_data['quote_id']))
+            js = CommentSerializer(comments, many=True).data
+            i = 0
+            while i < len(comments):
+                if device_id in comments[i].ups:
+                    print('ups')      
+                    js[i]['device_up'] = True
+                elif device_id in comments[i].downs:
+                    js[i]['device_down'] = True
+                i += 1
+                    
+            print(comments)
+            return Response(data={'ok': True, 'message': 'list of comments',
+                                  'comments':js})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
         return Response(data={'ok': True})
     
 class QuotesUpUpdateView(APIView):
