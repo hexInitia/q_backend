@@ -29,3 +29,7 @@ class QuoteSerializer(CommentableModelSerializer,serializers.ModelSerializer):
 class QuotesCreateSerializer(serializers.Serializer):
     author = serializers.CharField(required=True)
     content = serializers.CharField(required=True)
+    
+class CommentToQuoteSerializer(serializers.Serializer):
+    content = serializers.CharField(required=True)
+    quote_id = serializers.CharField(required=True)

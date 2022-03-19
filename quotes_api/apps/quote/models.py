@@ -28,6 +28,7 @@ class Quote(CommentableModel):
 
 
 class Comment(CommentableModel):
+    objects = CommentManager()
     class Meta:
         db_table = 'Comment'
     

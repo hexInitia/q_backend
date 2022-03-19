@@ -10,3 +10,11 @@ class QuoteManager(models.DjongoManager):
             date=timezone.now(),
         )
         return quote
+    
+class CommentManager(models.DjongoManager):
+    def create_to_quote(self, data):
+        comment = self.create(
+            content=data['content'],
+            date=timezone.now(),
+        )
+        return comment
