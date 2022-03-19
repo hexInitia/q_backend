@@ -114,6 +114,10 @@ class QuotesUpUpdateView(APIView):
                 _id=ObjectId(data.validated_data['quote_id'])).first()
             if quote is not None:
                 device_id = data.validated_data['device_id']
+                if device_id in quote.downs:
+                    quote.downs.remove(device_id)
+                    quote.downs_count -= 1
+                    
                 if device_id in quote.ups:
                     quote.ups.remove(device_id)
                     quote.ups_count -= 1
@@ -123,6 +127,36 @@ class QuotesUpUpdateView(APIView):
                     
                 quote.save()
                 return Response(data={'ok': True, 'message': 'quote ups updated successfully'})
+            else:
+                return Response(data={'ok':False, 'message': 'invalid quote id'})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
+    
+class QuotesDownUpdateView(APIView):
+    def put(self, request):
+        data=QuotesDownUpdateSerializer(data={
+            'quote_id': rp(request,'quote_id'),
+            'device_id': rp(request,'device_id'),
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            quote = Quote.objects.filter(
+                _id=ObjectId(data.validated_data['quote_id'])).first()
+            if quote is not None:
+                device_id = data.validated_data['device_id']
+                if device_id in quote.ups:
+                    quote.ups.remove(device_id)
+                    quote.ups_count -= 1
+                    
+                if device_id in quote.downs:
+                    quote.downs.remove(device_id)
+                    quote.downs_count -= 1
+                else:
+                    quote.downs.append(device_id)
+                    quote.downs_count += 1
+                    
+                quote.save()
+                return Response(data={'ok': True, 'message': 'quote downs updated successfully'})
             else:
                 return Response(data={'ok':False, 'message': 'invalid quote id'})
         else:

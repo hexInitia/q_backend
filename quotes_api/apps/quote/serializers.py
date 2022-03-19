@@ -46,4 +46,8 @@ class QuotesUpUpdateSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
     
+class QuotesDownUpdateSerializer(serializers.Serializer):
+    quote_id = serializers.CharField(required=True)
+    device_id = serializers.CharField(required=True)
+    
     
