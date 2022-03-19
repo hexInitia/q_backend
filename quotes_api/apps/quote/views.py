@@ -161,3 +161,63 @@ class QuotesDownUpdateView(APIView):
                 return Response(data={'ok':False, 'message': 'invalid quote id'})
         else:
             return Response(data={'ok':False, 'message': data.errors})
+    
+class CommentsUpUpdateView(APIView):
+    def put(self, request):
+        data=CommentsUpUpdateSerializer(data={
+            'comment_id': rp(request,'comment_id'),
+            'device_id': rp(request,'device_id'),
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            comment = Comment.objects.filter(
+                _id=ObjectId(data.validated_data['comment_id'])).first()
+            if comment is not None:
+                device_id = data.validated_data['device_id']
+                if device_id in comment.downs:
+                    comment.downs.remove(device_id)
+                    comment.downs_count -= 1
+                    
+                if device_id in comment.ups:
+                    comment.ups.remove(device_id)
+                    comment.ups_count -= 1
+                else:
+                    comment.ups.append(device_id)
+                    comment.ups_count += 1
+                    
+                comment.save()
+                return Response(data={'ok': True, 'message': 'comment ups updated successfully'})
+            else:
+                return Response(data={'ok':False, 'message': 'invalid comment id'})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
+    
+class CommentsDownUpdateView(APIView):
+    def put(self, request):
+        data=CommentsDownUpdateSerializer(data={
+            'comment_id': rp(request,'comment_id'),
+            'device_id': rp(request,'device_id'),
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            comment = Comment.objects.filter(
+                _id=ObjectId(data.validated_data['comment_id'])).first()
+            if comment is not None:
+                device_id = data.validated_data['device_id']
+                if device_id in comment.ups:
+                    comment.ups.remove(device_id)
+                    comment.ups_count -= 1
+                    
+                if device_id in comment.downs:
+                    comment.downs.remove(device_id)
+                    comment.downs_count -= 1
+                else:
+                    comment.downs.append(device_id)
+                    comment.downs_count += 1
+                    
+                comment.save()
+                return Response(data={'ok': True, 'message': 'comment downs updated successfully'})
+            else:
+                return Response(data={'ok':False, 'message': 'invalid comment id'})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})

@@ -10,4 +10,6 @@ urlpatterns = [
     path('api/comments/to_comment', CommentToCommentView.as_view()),
     path('api/quotes/up/update', QuotesUpUpdateView.as_view()),
     path('api/quotes/down/update', QuotesDownUpdateView.as_view()),
+    path('api/comments/up/update', CommentsUpUpdateView.as_view()),
+    path('api/comments/down/update', CommentsDownUpdateView.as_view()),
 ]
