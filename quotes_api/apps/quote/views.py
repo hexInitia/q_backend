@@ -124,6 +124,35 @@ class CommentsReadView(APIView):
                                   'comments':js})
         else:
             return Response(data={'ok':False, 'message': data.errors})
+        
+class QuotesHomeView(APIView):
+    def get(self, request):
+        data=QuotesHomeSerializer(data={
+            'device_id': rp(request,'device_id'),
+        })
+        if data.is_valid():    
+            quotes = Quote.objects.mongo_aggregate(
+                [{'$sample': {'size': 5}}]
+            )
+            js = QuoteSerializer(quotes, many=True).data
+            device_id = data.validated_data['device_id']
+            i = 0
+            while i < len(js):
+                if device_id in js[i]['ups']:
+                    js[i]['ups'] = True
+                    js[i]['downs'] = False
+                elif device_id in js[i]['downs']:
+                    js[i]['ups'] = False
+                    js[i]['downs'] = True
+                else:
+                    js[i]['ups'] = False
+                    js[i]['downs'] = False
+                js[i]['comments'] = None
+                i += 1
+            return Response(data={'ok':True,
+                                'message': 'random quotes', 'quotes': js})
+        else:
+            return Response(data={'ok':False, 'message':data.errors})
     
 class QuotesUpUpdateView(APIView):
     def put(self, request):
