@@ -28,6 +28,7 @@ class Quote(CommentableModel):
 
 
 class Comment(CommentableModel):
+    original_quote = models.TextField(default="")
     objects = CommentManager()
     class Meta:
         db_table = 'Comment'
