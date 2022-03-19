@@ -153,6 +153,24 @@ class QuotesHomeView(APIView):
                                 'message': 'random quotes', 'quotes': js})
         else:
             return Response(data={'ok':False, 'message':data.errors})
+        
+class QuoteReadView(APIView):
+    def get(self, request):
+        data=QuoteReadSerializer(data={
+            'quote_id': rp(request, 'quote_id')
+        })
+        if data.is_valid():
+            quote = Quote.objects.filter(
+                _id=ObjectId(data.validated_data['quote_id'])).first()
+            if quote is not None:
+                js = QuoteSerializer(quote).data
+                return Response(data={'ok': True,
+                                      'message': 'a quote from the server',
+                                      'quote': js})
+            else:
+                return Response(data={'ok': False, 'message': 'invalid quote id'})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
     
 class QuotesUpUpdateView(APIView):
     def put(self, request):

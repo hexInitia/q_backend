@@ -61,3 +61,6 @@ class CommentsDownUpdateSerializer(serializers.Serializer):
 class QuotesHomeSerializer(serializers.Serializer):
     device_id = serializers.CharField(required=True)
     
+class QuoteReadSerializer(serializers.Serializer):
+    quote_id = serializers.CharField(required=True)
+    
