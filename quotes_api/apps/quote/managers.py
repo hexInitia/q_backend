@@ -18,3 +18,10 @@ class CommentManager(models.DjongoManager):
             date=timezone.now(),
         )
         return comment
+    
+    def create_to_comment(self, data):
+        comment = self.create(
+            content=data['content'],
+            date=timezone.now(),
+        )
+        return comment

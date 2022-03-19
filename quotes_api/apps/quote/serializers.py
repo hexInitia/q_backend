@@ -33,3 +33,7 @@ class QuotesCreateSerializer(serializers.Serializer):
 class CommentToQuoteSerializer(serializers.Serializer):
     content = serializers.CharField(required=True)
     quote_id = serializers.CharField(required=True)
+    
+class CommentToCommentSerializer(serializers.Serializer):
+    content = serializers.CharField(required=True)
+    comment_id = serializers.CharField(required=True)

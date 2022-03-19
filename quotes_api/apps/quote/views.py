@@ -57,9 +57,39 @@ class CommentToQuoteView(APIView):
                 
         else:
             return Response(data={'ok':False, 'message': data.errors})
-        return Response(data={'ok':True})
     
     def check_quote_id(self, request):
         if 'quote_id' in request.query_params.keys():
             return request.query_params['quote_id']
+        return None
+    
+class CommentToCommentView(APIView):
+    def post(self, request):
+        print(request.query_params)
+        
+        data=CommentToCommentSerializer(data={
+            'content': request.data['content'],
+            'comment_id': self.check_comment_id(request),
+            })
+        if data.is_valid():
+            print(data.validated_data)
+            to_comment = Comment.objects.filter(_id = ObjectId(data.validated_data['comment_id'])).first()
+            if to_comment is not None:
+                comment = Comment.objects.create_to_comment(data.validated_data)
+                to_comment.comments.append(str(comment._id))
+                to_comment.comments_count += 1
+                to_comment.save()
+                js = CommentSerializer(comment)
+                return Response(data={'ok':True,
+                                      'message': 'comment created successfully',
+                                      'comments': [js.data]})
+            else:
+                return Response(data={'ok':False, 'message':'invalid comment id'})
+                
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
+    
+    def check_comment_id(self, request):
+        if 'comment_id' in request.query_params.keys():
+            return request.query_params['comment_id']
         return None
