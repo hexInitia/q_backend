@@ -107,10 +107,16 @@ class CommentsReadView(APIView):
             i = 0
             while i < len(comments):
                 if device_id in comments[i].ups:
-                    print('ups')      
-                    js[i]['device_up'] = True
+                    js[i]['ups'] = True
+                    js[i]['downs'] = False
+                    
                 elif device_id in comments[i].downs:
-                    js[i]['device_down'] = True
+                    js[i]['downs'] = True
+                    js[i]['ups'] = False
+                else:
+                    js[i]['ups'] = False
+                    js[i]['downs'] = False
+                    
                 i += 1
                     
             print(comments)
@@ -118,7 +124,6 @@ class CommentsReadView(APIView):
                                   'comments':js})
         else:
             return Response(data={'ok':False, 'message': data.errors})
-        return Response(data={'ok': True})
     
 class QuotesUpUpdateView(APIView):
     def put(self, request):
