@@ -30,7 +30,7 @@ SECRET_KEY = secret['SECRET_KEY']
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+    '127.0.0.1', '.herokuapp.com'
 ]
 
 
