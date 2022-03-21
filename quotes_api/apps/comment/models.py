@@ -1,7 +1,6 @@
 from djongo import models
 from quotes_api.apps.comment.mannagers import CommentManager
 
-from quotes_api.apps.quote.models import CommentableModel
 
 # Create your models here.
 class Comment(models.Model):
@@ -17,8 +16,8 @@ class Comment(models.Model):
     
     original_quote = models.TextField(default="")
     objects = CommentManager()
-    class Meta:
-        db_table = 'Comment'
+    # class Meta:
+    #     db_table = 'Comment'
     
     def __str__(self):
         return "{}".format(self._id)
