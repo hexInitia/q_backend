@@ -12,19 +12,24 @@ class CommentableModelSerializer(serializers.Serializer):
     comments = serializers.JSONField(required=False)
     comments_count = serializers.IntegerField(default=0)
     date = serializers.DateTimeField(required=False)
+    
     class Meta:
         fields = ['_id', 'content', 'ups', 'ups_count', 'downs',
-         'downs_count', 'comments', 'comments_count', 'date']
+         'downs_count', 'comments', 'comments_count', 'date',]
         
 
 class QuoteSerializer(CommentableModelSerializer,serializers.ModelSerializer):
     class Meta:
         model = Quote
-        fields = CommentableModelSerializer.Meta.fields + ['author', 'enabled', 'days_to_die']
+        fields = CommentableModelSerializer.Meta.fields + ['author',
+            'enabled', 'days_to_die',  'background_color',
+            'font_family']
         
 class QuotesCreateSerializer(serializers.Serializer):
     author = serializers.CharField(required=True)
     content = serializers.CharField(required=True)
+    font_family = serializers.CharField()
+    background_color = serializers.CharField()
     
 
     

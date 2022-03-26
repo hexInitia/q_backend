@@ -76,7 +76,7 @@ class CommentToCommentView(APIView):
     
     
     
-class CommentsReadView(APIView):
+class CommentsFromQuoteView(APIView):
     def get(self, request):
         data=CommentsReadSerializer(data={
             'quote_id': rp(request,'quote_id'),
@@ -88,8 +88,7 @@ class CommentsReadView(APIView):
             comments = Comment.objects.find_ups_downs_comments(device_id)
             
             js = CommentSerializer(comments, many=True).data
-                    
-            print(comments)
+                            
             return Response(data={'ok': True, 'message': 'list of comments',
                                   'comments':js})
         else:

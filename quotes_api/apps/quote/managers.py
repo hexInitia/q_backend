@@ -6,6 +6,8 @@ class QuoteManager(models.DjongoManager):
         quote = self.create(
             content=data['content'],
             author=data['author'],
+            background_color=data['background_color'],
+            font_family=data['font_family'],
             enabled=True,
             date=timezone.now(),
         )

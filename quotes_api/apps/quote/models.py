@@ -18,6 +18,8 @@ class Quote(models.Model):
     enabled = models.BooleanField()
     days_to_die = models.PositiveIntegerField(default=7)
     objects = QuoteManager()
+    background_color = models.TextField()
+    font_family = models.TextField()
     # class Meta:
     #     db_table = 'Quote'
     def __str__(self):
