@@ -85,7 +85,8 @@ class CommentsFromQuoteView(APIView):
         if data.is_valid():
             print(data.validated_data)
             device_id = data.validated_data['device_id']
-            comments = Comment.objects.find_ups_downs_comments(device_id)
+            quote_id = data.validated_data['quote_id']
+            comments = Comment.objects.find_ups_downs_comments(device_id, quote_id)
             
             js = CommentSerializer(comments, many=True).data
                             

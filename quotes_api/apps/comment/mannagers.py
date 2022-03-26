@@ -24,9 +24,14 @@ class CommentManager(models.DjongoManager):
         to_comment.save()
         return comment
     
-    def find_ups_downs_comments(self, device_id):
+    def find_ups_downs_comments(self, device_id, original_quote):
         comments = self.mongo_aggregate(
                 [
+                    {
+                        '$match': {
+                            'original_quote': original_quote
+                        }
+                    },
                     {
                         '$project': {
                             '_id': '$_id',
