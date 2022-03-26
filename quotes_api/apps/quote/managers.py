@@ -1,4 +1,5 @@
 from djongo import models
+from djongo.models import Q
 from django.utils import timezone
 
 class QuoteManager(models.DjongoManager):
@@ -71,3 +72,11 @@ class QuoteManager(models.DjongoManager):
                 
             quote.save()
         return quote
+    
+    def search(self, query):
+        quotes = self.filter(
+            Q(author__contains=query) |
+            Q(content__contains=query) 
+        )
+        print(quotes)
+        return quotes

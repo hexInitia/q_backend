@@ -9,5 +9,5 @@ urlpatterns = [
     path('api/quotes/read', QuoteReadView.as_view()),
     path('api/quotes/up/update', QuotesUpUpdateView.as_view()),
     path('api/quotes/down/update', QuotesDownUpdateView.as_view()),
-    
+    path('api/quotes/search', QuotesSearch.as_view()),
 ]

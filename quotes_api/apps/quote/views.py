@@ -90,3 +90,19 @@ class QuotesDownUpdateView(APIView):
                 return Response(data={'ok':False, 'message': 'invalid quote id'})
         else:
             return Response(data={'ok':False, 'message': data.errors})
+        
+class QuotesSearch(APIView):
+    def get(self, request):
+        data=QuotesSearchSerializer(data={
+            'query': rp(request ,'query')
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            quotes = Quote.objects.search(
+                query=data.validated_data['query']
+            )
+            js = QuoteSerializer(quotes, many=True).data
+            return Response(data={'ok':True, 'message': 'quotes searching result',
+                                  'quotes': js})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
