@@ -15,6 +15,7 @@ class Comment(models.Model):
     date = models.DateTimeField()    
     
     original_quote = models.TextField(default="")
+    original_comment = models.TextField(default="")
     objects = CommentManager()
     # class Meta:
     #     db_table = 'Comment'

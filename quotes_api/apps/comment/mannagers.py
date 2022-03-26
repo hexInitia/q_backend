@@ -14,9 +14,11 @@ class CommentManager(models.DjongoManager):
         return comment
     
     def create_to_comment(self, data, to_comment):
+        print(data)
         comment = self.create(
             content=data['content'],
             original_quote=data['original_quote'],
+            original_comment=to_comment._id,
             date=timezone.now(),
         )
         to_comment.comments.append(str(comment._id))
@@ -24,7 +26,7 @@ class CommentManager(models.DjongoManager):
         to_comment.save()
         return comment
     
-    def find_ups_downs_comments(self, device_id, original_quote):
+    def comments_from_quote(self, device_id, original_quote):
         comments = self.mongo_aggregate(
                 [
                     {
@@ -37,6 +39,38 @@ class CommentManager(models.DjongoManager):
                             '_id': '$_id',
                             'content': 'content',
                             'original_quote': '$original_quote',
+                            'ups_count': '$ups_count',
+                            'downs_count': '$downs_count',
+                            'comments': '$comments',
+                            'comments_count': '$comments_count',
+                            'date': '$date',
+                            
+                            "ups": {
+                                '$in': [device_id, '$ups']
+                            },
+                            "downs": {
+                                '$in': [device_id, '$downs']
+                            }
+                        }
+                    }
+                ]
+            )
+        return comments
+    
+    def comments_from_comment(self, device_id, original_comment):
+        comments = self.mongo_aggregate(
+                [
+                    {
+                        '$match': {
+                            'original_comment': original_comment
+                        }
+                    },
+                    {
+                        '$project': {
+                            '_id': '$_id',
+                            'content': 'content',
+                            'original_quote': '$original_quote',
+                            'original_comment': '$original_comment',
                             'ups_count': '$ups_count',
                             'downs_count': '$downs_count',
                             'comments': '$comments',

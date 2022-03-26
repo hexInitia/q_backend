@@ -61,7 +61,7 @@ class CommentToCommentView(APIView):
             if to_comment is not None:
                 comment = Comment.objects.create_to_comment({
                     'content': data.validated_data['content'],
-                    'original_quote': to_comment.original_quote
+                    'original_quote': to_comment.original_quote,
                 }, to_comment)
                 
                 js = CommentSerializer(comment)
@@ -78,7 +78,7 @@ class CommentToCommentView(APIView):
     
 class CommentsFromQuoteView(APIView):
     def get(self, request):
-        data=CommentsReadSerializer(data={
+        data=CommentsFromQuoteSerializer(data={
             'quote_id': rp(request,'quote_id'),
             'device_id': rp(request,'device_id'),
         })
@@ -86,7 +86,26 @@ class CommentsFromQuoteView(APIView):
             print(data.validated_data)
             device_id = data.validated_data['device_id']
             quote_id = data.validated_data['quote_id']
-            comments = Comment.objects.find_ups_downs_comments(device_id, quote_id)
+            comments = Comment.objects.comments_from_quote(device_id, quote_id)
+            
+            js = CommentSerializer(comments, many=True).data
+                            
+            return Response(data={'ok': True, 'message': 'list of comments',
+                                  'comments':js})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
+        
+class CommentsFromCommentView(APIView):
+    def get(self, request):
+        data=CommentsFromCommentSerializer(data={
+            'comment_id': rp(request,'comment_id'),
+            'device_id': rp(request,'device_id'),
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            device_id = data.validated_data['device_id']
+            comment_id = data.validated_data['comment_id']
+            comments = Comment.objects.comments_from_comment(device_id, comment_id)
             
             js = CommentSerializer(comments, many=True).data
                             

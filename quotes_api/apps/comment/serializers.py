@@ -6,7 +6,8 @@ from quotes_api.apps.quote.serializers import CommentableModelSerializer
 class CommentSerializer(CommentableModelSerializer,serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = CommentableModelSerializer.Meta.fields + ['original_quote']
+        fields = CommentableModelSerializer.Meta.fields + ['original_quote',
+                                                           'original_comment']
         
 class CommentToQuoteSerializer(serializers.Serializer):
     content = serializers.CharField(required=True)
@@ -16,8 +17,12 @@ class CommentToCommentSerializer(serializers.Serializer):
     content = serializers.CharField(required=True)
     comment_id = serializers.CharField(required=True)
     
-class CommentsReadSerializer(serializers.Serializer):
+class CommentsFromQuoteSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)
+    device_id = serializers.CharField(required=True)
+    
+class CommentsFromCommentSerializer(serializers.Serializer):
+    comment_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
     
 class CommentsUpUpdateSerializer(serializers.Serializer):
