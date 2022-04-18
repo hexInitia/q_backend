@@ -19,14 +19,14 @@ class CommentableModelSerializer(serializers.Serializer):
         
 
 class QuoteSerializer(CommentableModelSerializer,serializers.ModelSerializer):
-    background_color = serializers.SerializerMethodField()
-    font_family = serializers.SerializerMethodField()
+    # background_color = serializers.SerializerMethodField()
+    # font_family = serializers.SerializerMethodField()
     
-    def get_background_color(self, obj):
-        return getattr(obj, 'background_color', '')
+    # def get_background_color(self, obj):
+    #     return getattr(obj, 'background_color', '')
     
-    def get_font_family(self, obj):
-        return getattr(obj, 'font_family', '')
+    # def get_font_family(self, obj):
+    #     return getattr(obj, 'font_family', '')
     
     class Meta:
         model = Quote
