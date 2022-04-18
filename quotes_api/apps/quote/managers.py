@@ -29,6 +29,8 @@ class QuoteManager(models.DjongoManager):
                         'author': '$author',
                         'enabled': '$enabled',
                         'days_to_die': '$days_to_die',
+                        'background_color': '$background_color',
+                        'font_family': '$font_family',
                         'ups': {
                             '$in': [device_id, '$ups']
                         },
