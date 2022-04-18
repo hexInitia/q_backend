@@ -60,8 +60,7 @@ class CommentToCommentView(APIView):
             to_comment = Comment.objects.filter(_id = ObjectId(data.validated_data['comment_id'])).first()
             if to_comment is not None:
                 comment = Comment.objects.create_to_comment({
-                    'content': data.validated_data['content'],
-                    'original_quote': to_comment.original_quote,
+                    'content': data.validated_data['content']
                 }, to_comment)
                 
                 js = CommentSerializer(comment)

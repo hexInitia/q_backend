@@ -17,7 +17,6 @@ class CommentManager(models.DjongoManager):
         print(data)
         comment = self.create(
             content=data['content'],
-            original_quote=data['original_quote'],
             original_comment=to_comment._id,
             date=timezone.now(),
         )

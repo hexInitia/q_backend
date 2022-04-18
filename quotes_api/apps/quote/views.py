@@ -34,6 +34,7 @@ class QuotesHomeView(APIView):
                 device_id = data.validated_data['device_id'])
                 
                 js = QuoteSerializer(quotes, many=True).data
+                print(js)
                 return Response(data={'ok':True,
                                     'message': 'random quotes', 'quotes': js})
             else:
