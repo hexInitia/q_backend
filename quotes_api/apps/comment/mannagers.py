@@ -36,7 +36,7 @@ class CommentManager(models.DjongoManager):
                     {
                         '$project': {
                             '_id': '$_id',
-                            'content': 'content',
+                            'content': '$content',
                             'original_quote': '$original_quote',
                             'ups_count': '$ups_count',
                             'downs_count': '$downs_count',
@@ -67,7 +67,7 @@ class CommentManager(models.DjongoManager):
                     {
                         '$project': {
                             '_id': '$_id',
-                            'content': 'content',
+                            'content': '$content',
                             'original_quote': '$original_quote',
                             'original_comment': '$original_comment',
                             'ups_count': '$ups_count',

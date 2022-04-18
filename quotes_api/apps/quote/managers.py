@@ -24,7 +24,7 @@ class QuoteManager(models.DjongoManager):
                         'content': '$content',
                         'ups_count': '$ups_count',
                         'downs_count': '$downs_count',
-                        'comments_coun': '$comments_coun',
+                        'comments_count': '$comments_count',
                         'date': '$date',
                         'author': '$author',
                         'enabled': '$enabled',
