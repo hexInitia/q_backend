@@ -32,7 +32,7 @@ class QuotesHomeView(APIView):
                 print(data.validated_data)
                 quotes = Quote.objects.find_random_home(
                 device_id = data.validated_data['device_id'])
-                
+                print(quotes)
                 js = QuoteSerializer(quotes, many=True).data
                 print(js)
                 return Response(data={'ok':True,
