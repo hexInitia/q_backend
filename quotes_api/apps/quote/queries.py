@@ -1,4 +1,4 @@
-def votes_aggregation(device_id):
+def votes_projection(device_id):
     return {
             '$project': {
                 '_id': '$_id',
@@ -17,6 +17,17 @@ def votes_aggregation(device_id):
                 },
                 'downs': {
                     '$in': [device_id, '$downs']
-                }
+                }, 
+                'votes': '$votes'
+            }
+        }
+    
+def searc_match(query):
+    return {
+            '$match': {
+                '$or': [
+                    {'author': {'$regex': query}},
+                    {'content': {'$regex': query}},
+                ]
             }
         }

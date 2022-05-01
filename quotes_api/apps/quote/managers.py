@@ -20,7 +20,7 @@ class QuoteManager(CommentableManager):
         quotes = self.mongo_aggregate(
             [
                 {'$sample': {'size': 5}},
-                queries.votes_aggregation(device_id)
+                queries.votes_projection(device_id)
             ]
         )
         return quotes
@@ -29,7 +29,7 @@ class QuoteManager(CommentableManager):
         quotes = self.mongo_aggregate(
             [
                 {'$match': {'_id': _id}},
-                queries.votes_aggregation(device_id)
+                queries.votes_projection(device_id)
             ]
         )
         quote = None
@@ -40,11 +40,14 @@ class QuoteManager(CommentableManager):
         
         return quote
     
-    def search(self, query):
-        quotes = self.filter(
-            Q(author__contains=query) |
-            Q(content__contains=query) 
+    def search(self, query, device_id):
+        quotes = self.mongo_aggregate(
+            [
+                queries.searc_match(query),
+                queries.votes_projection(device_id)
+            ]
         )
+        print('search', quotes)
         return quotes
     
    

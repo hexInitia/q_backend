@@ -87,12 +87,14 @@ class QuoteVotesUpdateView(APIView):
 class QuotesSearch(APIView):
     def get(self, request):
         data=QuotesSearchSerializer(data={
-            'query': rp(request ,'query')
+            'query': rp(request ,'query'),
+            'device_id': rp(request,'device_id'),
         })
         if data.is_valid():
             print(data.validated_data)
             quotes = Quote.objects.search(
-                query=data.validated_data['query']
+                query=data.validated_data['query'],
+                device_id=data.validated_data['device_id'],
             )
             js = QuoteSerializer(quotes, many=True).data
             return Response(data={'ok':True, 'message': 'quotes searching result',
