@@ -1,33 +1,9 @@
 from rest_framework import serializers
 from .models import *
+from quotes_api.apps.generic.serializers import CommentableModelSerializer
 
-
-class CommentableModelSerializer(serializers.Serializer):
-    _id = serializers.CharField(required=False)
-    content = serializers.CharField()
-    ups = serializers.JSONField(required=False)
-    ups_count = serializers.IntegerField(default=0)
-    downs = serializers.JSONField(required=False)
-    downs_count = serializers.IntegerField(default=0)
-    comments = serializers.JSONField(required=False)
-    comments_count = serializers.IntegerField(default=0)
-    date = serializers.DateTimeField(required=False)
-    
-    class Meta:
-        fields = ['_id', 'content', 'ups', 'ups_count', 'downs',
-         'downs_count', 'comments', 'comments_count', 'date',]
-        
 
 class QuoteSerializer(CommentableModelSerializer,serializers.ModelSerializer):
-    # background_color = serializers.SerializerMethodField()
-    # font_family = serializers.SerializerMethodField()
-    
-    # def get_background_color(self, obj):
-    #     return getattr(obj, 'background_color', '')
-    
-    # def get_font_family(self, obj):
-    #     return getattr(obj, 'font_family', '')
-    
     class Meta:
         model = Quote
         fields = CommentableModelSerializer.Meta.fields + ['author',
@@ -39,8 +15,6 @@ class QuotesCreateSerializer(serializers.Serializer):
     content = serializers.CharField(required=True)
     font_family = serializers.CharField()
     background_color = serializers.CharField()
-    
-
     
 class QuotesUpUpdateSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)
@@ -59,4 +33,8 @@ class QuoteReadSerializer(serializers.Serializer):
     
 class QuotesSearchSerializer(serializers.Serializer):
     query = serializers.CharField(required=True)
-    
+        
+class QuotesVotesSerializer(serializers.Serializer):
+    quote_id = serializers.CharField(required=True)
+    device_id = serializers.CharField(required=True)
+    positive = serializers.BooleanField(required=True)
