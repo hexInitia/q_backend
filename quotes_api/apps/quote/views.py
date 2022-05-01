@@ -74,7 +74,6 @@ class QuoteVotesUpdateView(APIView):
                 device_id = data.validated_data['device_id'],
                 _id=ObjectId(data.validated_data['quote_id']),
                 positive=data.validated_data['positive'])
-            print('quote:', quote)
             if quote is not None:
                 return Response(data={'ok': True, 'message': 'quote ups updated successfully'})
             else:

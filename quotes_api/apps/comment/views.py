@@ -113,39 +113,22 @@ class CommentsFromCommentView(APIView):
         else:
             return Response(data={'ok':False, 'message': data.errors})
         
-        
-    
-class CommentsUpUpdateView(APIView):
+      
+class CommentsVotesUpdateView(APIView):
     def put(self, request):
-        data=CommentsUpUpdateSerializer(data={
+        data=CommentsVotesSerializer(data={
             'comment_id': rp(request,'comment_id'),
             'device_id': rp(request,'device_id'),
+            'positive': rp(request,'positive'),
         })
         if data.is_valid():
             print(data.validated_data)
-            comment = Comment.objects.update_ups(
+            comment = Comment.objects.update_votes(
                 device_id = data.validated_data['device_id'],
-                _id=ObjectId(data.validated_data['comment_id']))
+                _id=ObjectId(data.validated_data['comment_id']),
+                positive=data.validated_data['positive'])
             if comment is not None:
                 return Response(data={'ok': True, 'message': 'comment ups updated successfully'})
-            else:
-                return Response(data={'ok':False, 'message': 'invalid comment id'})
-        else:
-            return Response(data={'ok':False, 'message': data.errors})
-    
-class CommentsDownUpdateView(APIView):
-    def put(self, request):
-        data=CommentsDownUpdateSerializer(data={
-            'comment_id': rp(request,'comment_id'),
-            'device_id': rp(request,'device_id'),
-        })
-        if data.is_valid():
-            print(data.validated_data)
-            comment = Comment.objects.update_downs(
-                device_id = data.validated_data['device_id'],
-                _id=ObjectId(data.validated_data['comment_id']))
-            if comment is not None:
-                return Response(data={'ok': True, 'message': 'comment downs updated successfully'})
             else:
                 return Response(data={'ok':False, 'message': 'invalid comment id'})
         else:

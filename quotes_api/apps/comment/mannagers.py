@@ -1,7 +1,9 @@
 from djongo import models
 from django.utils import timezone
 
-class CommentManager(models.DjongoManager):
+from quotes_api.apps.generic.managers import CommentableManager
+
+class CommentManager(CommentableManager):
     def create_to_quote(self, data, quote):
         comment = self.create(
             content=data['content'],
@@ -87,36 +89,3 @@ class CommentManager(models.DjongoManager):
                 ]
             )
         return comments
-    
-    def update_ups(self, _id, device_id):
-        comment = self.filter(_id=_id).first()
-        if comment is not None:
-            if device_id in comment.downs:
-                comment.downs.remove(device_id)
-                comment.downs_count -= 1
-            if device_id in comment.ups:
-                comment.ups.remove(device_id)
-                comment.ups_count -= 1
-            else:
-                comment.ups.append(device_id)
-                comment.ups_count += 1
-            
-            comment.save()
-        
-        return comment
-    
-    def update_downs(self, _id, device_id):
-        comment = self.filter(_id=_id).first()
-        if comment is not None:
-            if device_id in comment.ups:
-                comment.ups.remove(device_id)
-                comment.ups_count -= 1
-            if device_id in comment.downs:
-                comment.downs.remove(device_id)
-                comment.downs_count -= 1
-            else:
-                comment.downs.append(device_id)
-                comment.downs_count += 1
-                
-            comment.save()
-        return comment

@@ -45,44 +45,11 @@ class QuoteManager(CommentableManager):
         )
         return quotes
     
-    def update_ups(self, _id, device_id,):
-        quote = self.filter(_id=_id).first()
-        if quote is not None:
-            if device_id in quote.downs:
-                quote.downs.remove(device_id)
-                quote.downs_count -= 1
-            if device_id in quote.ups:
-                quote.ups.remove(device_id)
-                quote.ups_count -= 1
-            else:
-                quote.ups.append(device_id)
-                quote.ups_count += 1
-                
-            quote.save()
-        return quote
-    
-    def update_downs(self, _id, device_id):
-        quote = self.filter(_id=_id).first()
-        if quote is not None:
-            if device_id in quote.ups:
-                    quote.ups.remove(device_id)
-                    quote.ups_count -= 1
-            if device_id in quote.downs:
-                quote.downs.remove(device_id)
-                quote.downs_count -= 1
-            else:
-                quote.downs.append(device_id)
-                quote.downs_count += 1
-                
-            quote.save()
-        return quote
-    
     def search(self, query):
         quotes = self.filter(
             Q(author__contains=query) |
             Q(content__contains=query) 
         )
-        print(quotes)
         return quotes
     
    

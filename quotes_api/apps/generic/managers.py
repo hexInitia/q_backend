@@ -2,31 +2,36 @@ from djongo import models
 
 class CommentableManager(models.DjongoManager):
     def update_votes(self, _id, device_id, positive):
-        quote = self.filter(_id=_id).first()
-        if quote is not None:
+        obj = self.filter(_id=_id).first()
+        if obj is not None:
             if positive:
-                quote = self._up_vote(quote, device_id)
+                obj = self._up_vote(obj, device_id)
             else:
-                quote = self._down_vote(quote, device_id)  
-        return quote
+                obj = self._down_vote(obj, device_id)  
+        return obj
     
-    def _up_vote(self, quote, device_id):
-        if device_id in quote.ups:
-            quote.ups.remove(device_id)
-            quote.votes -= 1
+    def _up_vote(self, obj, device_id):
+        if device_id in obj.downs:
+            obj.downs.remove(device_id)
+            obj.votes += 1
+        if device_id in obj.ups:
+            obj.ups.remove(device_id)
+            obj.votes -= 1
         else:
-            print("up vote")
-            quote.ups.append(device_id)
-            quote.votes += 1
-        quote.save()
-        return quote
+            obj.ups.append(device_id)
+            obj.votes += 1
+        obj.save()
+        return obj
     
-    def _down_vote(self, quote, device_id):
-        if device_id in quote.downs:
-            quote.downs.remove(device_id)
-            quote.votes += 1
+    def _down_vote(self, obj, device_id):
+        if device_id in obj.ups:
+            obj.ups.remove(device_id)
+            obj.votes -= 1
+        if device_id in obj.downs:
+            obj.downs.remove(device_id)
+            obj.votes += 1
         else:
-            quote.downs.append(device_id)
-            quote.votes -= 1
-        quote.save()
-        return quote
+            obj.downs.append(device_id)
+            obj.votes -= 1
+        obj.save()
+        return obj

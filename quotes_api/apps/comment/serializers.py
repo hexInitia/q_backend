@@ -24,11 +24,8 @@ class CommentsFromQuoteSerializer(serializers.Serializer):
 class CommentsFromCommentSerializer(serializers.Serializer):
     comment_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
-    
-class CommentsUpUpdateSerializer(serializers.Serializer):
+
+class CommentsVotesSerializer(serializers.Serializer):
     comment_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
-    
-class CommentsDownUpdateSerializer(serializers.Serializer):
-    comment_id = serializers.CharField(required=True)
-    device_id = serializers.CharField(required=True)
+    positive = serializers.BooleanField(required=True)
