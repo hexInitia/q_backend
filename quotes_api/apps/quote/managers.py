@@ -2,7 +2,9 @@ from djongo import models
 from djongo.models import Q
 from django.utils import timezone
 
-class QuoteManager(models.DjongoManager):
+from quotes_api.apps.generic.managers import CommentableManager
+
+class QuoteManager(CommentableManager):
     def create_quote(self, data):
         quote = self.create(
             content=data['content'],
@@ -47,8 +49,8 @@ class QuoteManager(models.DjongoManager):
         quote = self.filter(_id=_id).first()
         if quote is not None:
             if device_id in quote.downs:
-                    quote.downs.remove(device_id)
-                    quote.downs_count -= 1
+                quote.downs.remove(device_id)
+                quote.downs_count -= 1
             if device_id in quote.ups:
                 quote.ups.remove(device_id)
                 quote.ups_count -= 1
@@ -82,3 +84,5 @@ class QuoteManager(models.DjongoManager):
         )
         print(quotes)
         return quotes
+    
+   

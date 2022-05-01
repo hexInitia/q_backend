@@ -59,42 +59,29 @@ class QuoteReadView(APIView):
                 return Response(data={'ok': False, 'message': 'invalid quote id'})
         else:
             return Response(data={'ok':False, 'message': data.errors})
-    
-class QuotesUpUpdateView(APIView):
+
+        
+class QuoteVotesUpdateView(APIView):
     def put(self, request):
-        data=QuotesUpUpdateSerializer(data={
+        data=QuotesVotesSerializer(data={
             'quote_id': rp(request,'quote_id'),
             'device_id': rp(request,'device_id'),
+            'positive': rp(request,'positive'),
         })
         if data.is_valid():
             print(data.validated_data)
-            quote = Quote.objects.update_ups(
+            quote = Quote.objects.update_votes(
                 device_id = data.validated_data['device_id'],
-                _id=ObjectId(data.validated_data['quote_id']))
+                _id=ObjectId(data.validated_data['quote_id']),
+                positive=data.validated_data['positive'])
+            print('quote:', quote)
             if quote is not None:
                 return Response(data={'ok': True, 'message': 'quote ups updated successfully'})
             else:
                 return Response(data={'ok':False, 'message': 'invalid quote id'})
         else:
             return Response(data={'ok':False, 'message': data.errors})
-    
-class QuotesDownUpdateView(APIView):
-    def put(self, request):
-        data=QuotesDownUpdateSerializer(data={
-            'quote_id': rp(request,'quote_id'),
-            'device_id': rp(request,'device_id'),
-        })
-        if data.is_valid():
-            print(data.validated_data)
-            quote = Quote.objects.update_downs(
-                device_id = data.validated_data['device_id'],
-                _id=ObjectId(data.validated_data['quote_id']))
-            if quote is not None:
-                return Response(data={'ok': True, 'message': 'quote downs updated successfully'})
-            else:
-                return Response(data={'ok':False, 'message': 'invalid quote id'})
-        else:
-            return Response(data={'ok':False, 'message': data.errors})
+
         
 class QuotesSearch(APIView):
     def get(self, request):

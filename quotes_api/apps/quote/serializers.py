@@ -15,15 +15,7 @@ class QuotesCreateSerializer(serializers.Serializer):
     content = serializers.CharField(required=True)
     font_family = serializers.CharField()
     background_color = serializers.CharField()
-    
-class QuotesUpUpdateSerializer(serializers.Serializer):
-    quote_id = serializers.CharField(required=True)
-    device_id = serializers.CharField(required=True)
-    
-class QuotesDownUpdateSerializer(serializers.Serializer):
-    quote_id = serializers.CharField(required=True)
-    device_id = serializers.CharField(required=True)
-    
+
     
 class QuotesHomeSerializer(serializers.Serializer):
     device_id = serializers.CharField(required=True)
