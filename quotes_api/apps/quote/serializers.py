@@ -15,13 +15,13 @@ class QuotesCreateSerializer(serializers.Serializer):
     content = serializers.CharField(required=True)
     font_family = serializers.CharField()
     background_color = serializers.CharField()
-
     
 class QuotesHomeSerializer(serializers.Serializer):
     device_id = serializers.CharField(required=True)
     
 class QuoteReadSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)
+    device_id = serializers.CharField(required=True)
     
 class QuotesSearchSerializer(serializers.Serializer):
     query = serializers.CharField(required=True)

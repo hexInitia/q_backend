@@ -1,6 +1,6 @@
-from djongo import models
 from djongo.models import Q
 from django.utils import timezone
+from . import queries
 
 from quotes_api.apps.generic.managers import CommentableManager
 
@@ -20,30 +20,25 @@ class QuoteManager(CommentableManager):
         quotes = self.mongo_aggregate(
             [
                 {'$sample': {'size': 5}},
-                {
-                    '$project': {
-                        '_id': '$_id',
-                        'content': '$content',
-                        'ups_count': '$ups_count',
-                        'downs_count': '$downs_count',
-                        'comments_count': '$comments_count',
-                        'date': '$date',
-                        'author': '$author',
-                        'enabled': '$enabled',
-                        'days_to_die': '$days_to_die',
-                        'background_color': '$background_color',
-                        'font_family': '$font_family',
-                        'ups': {
-                            '$in': [device_id, '$ups']
-                        },
-                        'downs': {
-                            '$in': [device_id, '$downs']
-                        }
-                    }
-                }
+                queries.votes_aggregation(device_id)
             ]
         )
         return quotes
+    
+    def read(self, _id, device_id):
+        quotes = self.mongo_aggregate(
+            [
+                {'$match': {'_id': _id}},
+                queries.votes_aggregation(device_id)
+            ]
+        )
+        quote = None
+        try:
+            quote = quotes.next()
+        except:
+            pass
+        
+        return quote
     
     def search(self, query):
         quotes = self.filter(

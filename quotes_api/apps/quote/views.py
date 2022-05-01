@@ -31,7 +31,7 @@ class QuotesHomeView(APIView):
             if data.is_valid():    
                 print(data.validated_data)
                 quotes = Quote.objects.find_random_home(
-                device_id = data.validated_data['device_id'])
+                    device_id = data.validated_data['device_id'])
                 print(quotes)
                 js = QuoteSerializer(quotes, many=True).data
                 print(js)
@@ -45,11 +45,13 @@ class QuotesHomeView(APIView):
 class QuoteReadView(APIView):
     def get(self, request):
         data=QuoteReadSerializer(data={
-            'quote_id': rp(request, 'quote_id')
+            'quote_id': rp(request, 'quote_id'),
+            'device_id': rp(request,'device_id'),
         })
         if data.is_valid():
-            quote = Quote.objects.filter(
-                _id=ObjectId(data.validated_data['quote_id'])).first()
+            quote = Quote.objects.read(
+                device_id = data.validated_data['device_id'],
+                _id=ObjectId(data.validated_data['quote_id']))
             if quote is not None:
                 js = QuoteSerializer(quote).data
                 return Response(data={'ok': True,
