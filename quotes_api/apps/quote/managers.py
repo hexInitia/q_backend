@@ -1,6 +1,7 @@
 from djongo.models import Q
 from django.utils import timezone
 from . import queries
+from quotes_api.apps.generic import constants
 
 from quotes_api.apps.generic.managers import CommentableManager
 
@@ -19,7 +20,8 @@ class QuoteManager(CommentableManager):
     def home_quotes(self, device_id, page):
         quotes = self.mongo_aggregate(
             [
-                {'$sample': {'size': 5}},
+                {'$skip': page * constants.PAGE_SIZE},
+                {'$limit': 5},
                 queries.votes_projection(device_id)
             ]
         )
