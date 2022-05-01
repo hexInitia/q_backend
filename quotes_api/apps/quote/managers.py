@@ -16,13 +16,14 @@ class QuoteManager(CommentableManager):
         )
         return quote
     
-    def find_random_home(self, device_id):
+    def home_quotes(self, device_id, page):
         quotes = self.mongo_aggregate(
             [
                 {'$sample': {'size': 5}},
                 queries.votes_projection(device_id)
             ]
         )
+       
         return quotes
     
     def read(self, _id, device_id):
@@ -47,7 +48,6 @@ class QuoteManager(CommentableManager):
                 queries.votes_projection(device_id)
             ]
         )
-        print('search', quotes)
         return quotes
     
    

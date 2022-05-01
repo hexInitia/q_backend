@@ -26,21 +26,21 @@ class QuotesHomeView(APIView):
     def get(self, request):
         data=QuotesHomeSerializer(data={
             'device_id': rp(request,'device_id'),
+            'page': rp(request,'page'),
         })
-        try:
-            if data.is_valid():    
-                print(data.validated_data)
-                quotes = Quote.objects.find_random_home(
-                    device_id = data.validated_data['device_id'])
-                print(quotes)
-                js = QuoteSerializer(quotes, many=True).data
-                print(js)
-                return Response(data={'ok':True,
-                                    'message': 'random quotes', 'quotes': js})
-            else:
-                return Response(data={'ok':False, 'message':data.errors})
-        except Exception as e:
-            print(e)
+        if data.is_valid():    
+            print(data.validated_data)
+            quotes = Quote.objects.home_quotes(
+                device_id = data.validated_data['device_id'],
+                page = data.validated_data['page']
+            )
+            
+            js = QuoteSerializer(quotes, many=True).data
+            return Response(data={'ok':True,
+                                'message': 'random quotes', 'quotes': js})
+        else:
+            return Response(data={'ok':False, 'message':data.errors})
+        
         
 class QuoteReadView(APIView):
     def get(self, request):

@@ -18,6 +18,7 @@ class QuotesCreateSerializer(serializers.Serializer):
     
 class QuotesHomeSerializer(serializers.Serializer):
     device_id = serializers.CharField(required=True)
+    page = serializers.IntegerField(required=True)
     
 class QuoteReadSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)
