@@ -43,9 +43,11 @@ class QuoteManager(CommentableManager):
         
         return quote
     
-    def search(self, query, device_id):
+    def search(self, query, device_id, page):
         quotes = self.mongo_aggregate(
             [
+                {'$skip': page * constants.PAGE_SIZE},
+                {'$limit': constants.PAGE_SIZE},
                 queries.searc_match(query),
                 queries.votes_projection(device_id)
             ]

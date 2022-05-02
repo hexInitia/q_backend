@@ -27,6 +27,7 @@ class QuoteReadSerializer(serializers.Serializer):
 class QuotesSearchSerializer(serializers.Serializer):
     query = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
+    page = serializers.IntegerField(required=True)
         
 class QuotesVotesSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)

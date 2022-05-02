@@ -89,12 +89,14 @@ class QuotesSearch(APIView):
         data=QuotesSearchSerializer(data={
             'query': rp(request ,'query'),
             'device_id': rp(request,'device_id'),
+            'page': rp(request,'page')
         })
         if data.is_valid():
             print(data.validated_data)
             quotes = Quote.objects.search(
                 query=data.validated_data['query'],
                 device_id=data.validated_data['device_id'],
+                page=data.validated_data['page']
             )
             js = QuoteSerializer(quotes, many=True).data
             return Response(data={'ok':True, 'message': 'quotes searching result',
