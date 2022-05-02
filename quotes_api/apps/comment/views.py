@@ -8,8 +8,6 @@ from .models import *
 from bson import ObjectId
 from quotes_api.apps.utils import check_request_param as rp
 
-
-# Create your views here.
 class CreateCommentView(APIView):
     def post(self, request):
         comment = CommentSerializer(data=request.data)
@@ -80,12 +78,14 @@ class CommentsFromQuoteView(APIView):
         data=CommentsFromQuoteSerializer(data={
             'quote_id': rp(request,'quote_id'),
             'device_id': rp(request,'device_id'),
+            'page': rp(request,'page'),
         })
         if data.is_valid():
             print(data.validated_data)
             device_id = data.validated_data['device_id']
             quote_id = data.validated_data['quote_id']
-            comments = Comment.objects.comments_from_quote(device_id, quote_id)
+            page = data.validated_data['page']
+            comments = Comment.objects.comments_from_quote(device_id, quote_id, page)
             
             js = CommentSerializer(comments, many=True).data
                             
@@ -99,12 +99,15 @@ class CommentsFromCommentView(APIView):
         data=CommentsFromCommentSerializer(data={
             'comment_id': rp(request,'comment_id'),
             'device_id': rp(request,'device_id'),
+            'page': rp(request,'page'),
         })
         if data.is_valid():
             print(data.validated_data)
             device_id = data.validated_data['device_id']
             comment_id = data.validated_data['comment_id']
-            comments = Comment.objects.comments_from_comment(device_id, comment_id)
+            page = data.validated_data['page']
+            
+            comments = Comment.objects.comments_from_comment(device_id, comment_id, page)
             
             js = CommentSerializer(comments, many=True).data
                             

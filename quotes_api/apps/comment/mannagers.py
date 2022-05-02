@@ -1,6 +1,8 @@
 from djongo import models
 from django.utils import timezone
 
+from quotes_api.apps.generic import constants
+from . import queries
 from quotes_api.apps.generic.managers import CommentableManager
 
 class CommentManager(CommentableManager):
@@ -27,7 +29,7 @@ class CommentManager(CommentableManager):
         to_comment.save()
         return comment
     
-    def comments_from_quote(self, device_id, original_quote):
+    def comments_from_quote(self, device_id, original_quote, page):
         comments = self.mongo_aggregate(
                 [
                     {
@@ -35,30 +37,15 @@ class CommentManager(CommentableManager):
                             'original_quote': original_quote
                         }
                     },
-                    {
-                        '$project': {
-                            '_id': '$_id',
-                            'content': '$content',
-                            'original_quote': '$original_quote',
-                            'ups_count': '$ups_count',
-                            'downs_count': '$downs_count',
-                            'comments': '$comments',
-                            'comments_count': '$comments_count',
-                            'date': '$date',
-                            
-                            "ups": {
-                                '$in': [device_id, '$ups']
-                            },
-                            "downs": {
-                                '$in': [device_id, '$downs']
-                            }
-                        }
-                    }
+                    {'$skip': page * constants.PAGE_SIZE},
+                    {'$limit': constants.PAGE_SIZE},
+                    {'$sort': {'votes': -1}},
+                    queries.votes_projection(device_id)
                 ]
             )
         return comments
     
-    def comments_from_comment(self, device_id, original_comment):
+    def comments_from_comment(self, device_id, original_comment, page):
         comments = self.mongo_aggregate(
                 [
                     {
@@ -66,26 +53,10 @@ class CommentManager(CommentableManager):
                             'original_comment': original_comment
                         }
                     },
-                    {
-                        '$project': {
-                            '_id': '$_id',
-                            'content': '$content',
-                            'original_quote': '$original_quote',
-                            'original_comment': '$original_comment',
-                            'ups_count': '$ups_count',
-                            'downs_count': '$downs_count',
-                            'comments': '$comments',
-                            'comments_count': '$comments_count',
-                            'date': '$date',
-                            
-                            "ups": {
-                                '$in': [device_id, '$ups']
-                            },
-                            "downs": {
-                                '$in': [device_id, '$downs']
-                            }
-                        }
-                    }
+                    {'$skip': page * constants.PAGE_SIZE},
+                    {'$limit': constants.PAGE_SIZE},
+                    {'$sort': {'votes': -1}},
+                    queries.votes_projection(device_id)
                 ]
             )
         return comments

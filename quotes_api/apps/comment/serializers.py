@@ -20,10 +20,12 @@ class CommentToCommentSerializer(serializers.Serializer):
 class CommentsFromQuoteSerializer(serializers.Serializer):
     quote_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
+    page = serializers.IntegerField(required=True)
     
 class CommentsFromCommentSerializer(serializers.Serializer):
     comment_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)
+    page = serializers.IntegerField(required=True)
 
 class CommentsVotesSerializer(serializers.Serializer):
     comment_id = serializers.CharField(required=True)

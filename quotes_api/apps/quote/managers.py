@@ -21,7 +21,7 @@ class QuoteManager(CommentableManager):
         quotes = self.mongo_aggregate(
             [
                 {'$skip': page * constants.PAGE_SIZE},
-                {'$limit': 5},
+                {'$limit': constants.PAGE_SIZE},
                 queries.votes_projection(device_id)
             ]
         )
