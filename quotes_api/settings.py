@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     #Local
     'quotes_api.apps.generic',
     'quotes_api.apps.quote',
-    'quotes_api.apps.comment'
+    'quotes_api.apps.comment',
+    'quotes_api.apps.suggestion'
 ]
 
 MIDDLEWARE = [

@@ -22,6 +22,7 @@ class QuoteManager(CommentableManager):
             [
                 {'$skip': page * constants.PAGE_SIZE},
                 {'$limit': constants.PAGE_SIZE},
+                {'$sort': {'votes': -1}},
                 queries.votes_projection(device_id)
             ]
         )
