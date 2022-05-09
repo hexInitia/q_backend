@@ -6,4 +6,5 @@ app_name = 'quotes_api.apps.suggestion'
 urlpatterns = [
     path('api/suggestion/create', CreateSuggestionView.as_view(), name='create'),
     path('api/suggestion/read', ReadSuggestionView.as_view(), name='create'),
+    path('api/suggestion/votes/update', SuggestionVotesUpdateView.as_view(), name='votes_update'),
 ]

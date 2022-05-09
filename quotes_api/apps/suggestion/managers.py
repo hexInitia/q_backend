@@ -3,9 +3,10 @@ from djongo import models
 from django.utils import timezone
 
 from quotes_api.apps.generic import constants
+from quotes_api.apps.generic.managers import CommentableManager
 from quotes_api.apps.suggestion import queries
 
-class SuggestionManager(models.DjongoManager):
+class SuggestionManager(CommentableManager):
     def create_suggestion(self, content):
         suggestion = self.create(
             content=content,

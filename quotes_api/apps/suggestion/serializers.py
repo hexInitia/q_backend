@@ -13,3 +13,8 @@ class SuggestionReadSerializer(serializers.Serializer):
 class SuggestionSerializer(CommentableModelSerializer):
     class Meta:
         model = Suggestion
+        
+class SuggestionVotesSerializer(serializers.Serializer):
+    suggestion_id = serializers.CharField(required=True)
+    device_id = serializers.CharField(required=True)
+    positive = serializers.BooleanField(required=True)

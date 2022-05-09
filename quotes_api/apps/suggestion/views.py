@@ -39,3 +39,23 @@ class ReadSuggestionView(APIView):
                 return Response(data={'ok': False, 'message': 'invalid suggestion id'})
         else:
             return Response(data={'ok':False, 'message': data.errors}) 
+        
+class SuggestionVotesUpdateView(APIView):
+    def put(self, request):
+        data=SuggestionVotesSerializer(data={
+            'suggestion_id': rp(request,'suggestion_id'),
+            'device_id': rp(request,'device_id'),
+            'positive': rp(request,'positive'),
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            suggestion = Suggestion.objects.update_votes(
+                device_id = data.validated_data['device_id'],
+                _id=ObjectId(data.validated_data['suggestion_id']),
+                positive=data.validated_data['positive'])
+            if suggestion is not None:
+                return Response(data={'ok': True, 'message': 'suggestion votes updated successfully'})
+            else:
+                return Response(data={'ok':False, 'message': 'invalid suggestion id'})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
