@@ -123,6 +123,27 @@ class CommentsFromQuoteView(APIView):
         else:
             return Response(data={'ok':False, 'message': data.errors})
         
+class CommentsFromSuggestionView(APIView):
+    def get(self, request):
+        data=CommentsFromSuggestionSerializer(data={
+            'suggestion_id': rp(request,'suggestion_id'),
+            'device_id': rp(request,'device_id'),
+            'page': rp(request,'page'),
+        })
+        if data.is_valid():
+            print(data.validated_data)
+            device_id = data.validated_data['device_id']
+            suggestion_id = data.validated_data['suggestion_id']
+            page = data.validated_data['page']
+            comments = Comment.objects.comments_from_suggestion(device_id, suggestion_id, page)
+            
+            js = CommentSerializer(comments, many=True).data
+                            
+            return Response(data={'ok': True, 'message': 'list of comments',
+                                  'comments':js})
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
+        
 class CommentsFromCommentView(APIView):
     def get(self, request):
         data=CommentsFromCommentSerializer(data={

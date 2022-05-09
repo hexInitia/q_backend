@@ -27,6 +27,11 @@ class CommentsFromQuoteSerializer(serializers.Serializer):
     device_id = serializers.CharField(required=True)
     page = serializers.IntegerField(required=True)
     
+class CommentsFromSuggestionSerializer(serializers.Serializer):
+    suggestion_id = serializers.CharField(required=True)
+    device_id = serializers.CharField(required=True)
+    page = serializers.IntegerField(required=True)
+    
 class CommentsFromCommentSerializer(serializers.Serializer):
     comment_id = serializers.CharField(required=True)
     device_id = serializers.CharField(required=True)

@@ -10,5 +10,6 @@ urlpatterns = [
     path('api/comments/to_suggestion', CommentToSuggestionView.as_view()),
     path('api/comments/from_quote', CommentsFromQuoteView.as_view()),
     path('api/comments/from_comment', CommentsFromCommentView.as_view()),
+    path('api/comments/from_suggestion', CommentsFromSuggestionView.as_view()),
     path('api/comments/votes/update', CommentsVotesUpdateView.as_view()),
 ]

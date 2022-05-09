@@ -55,6 +55,21 @@ class CommentManager(CommentableManager):
                 ]
             )
         return comments
+    def comments_from_suggestion(self, device_id, original_suggestion, page):
+        comments = self.mongo_aggregate(
+                [
+                    {
+                        '$match': {
+                            'original_suggestion': original_suggestion
+                        }
+                    },
+                    {'$skip': page * constants.PAGE_SIZE},
+                    {'$limit': constants.PAGE_SIZE},
+                    {'$sort': {'votes': -1}},
+                    queries.votes_projection(device_id)
+                ]
+            )
+        return comments
     
     def comments_from_comment(self, device_id, original_comment, page):
         comments = self.mongo_aggregate(
