@@ -12,7 +12,10 @@ class CreateSuggestionView(APIView):
             suggestion = Suggestion.objects.create_suggestion(
                 content=data.validated_data['content'])
             if suggestion is not None:
+                js = SuggestionSerializer(suggestion).data
+                
                 return Response(data={'ok':True,
+                                      'suggestions': [js],
                                       'message': 'Suggestion created successfully {}'.format(suggestion._id)})
             else:
                 return Response(data={'ok':False, 'message':'error creating suggestion'})
