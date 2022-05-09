@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from quotes_api.apps.quote.models import Quote
+from quotes_api.apps.suggestion.models import Suggestion
 from .serializers import *
 from .models import *
 from bson import ObjectId
@@ -67,6 +68,34 @@ class CommentToCommentView(APIView):
                                       'comments': [js.data]})
             else:
                 return Response(data={'ok':False, 'message':'invalid comment id'})
+                
+        else:
+            return Response(data={'ok':False, 'message': data.errors})
+        
+class CommentToSuggestionView(APIView):
+    def post(self, request):
+        print(request.query_params)
+        
+        data=CommentToSuggestionSerializer(data={
+            'content': request.data['content'],
+            'suggestion_id': rp(request, 'suggestion_id'),
+            })
+        if data.is_valid():
+            print(data.validated_data)
+            to_suggestion = Suggestion.objects.filter(_id = ObjectId(data.validated_data['suggestion_id'])).first()
+            print(to_suggestion)
+            if to_suggestion is not None:
+                comment = Comment.objects.create_to_suggestion({
+                    'content': data.validated_data['content'],
+                    'suggestion_id': data.validated_data['suggestion_id']
+                }, to_suggestion)
+                
+                js = CommentSerializer(comment)
+                return Response(data={'ok':True,
+                                      'message': 'comment created successfully',
+                                      'comments': [js.data]})
+            else:
+                return Response(data={'ok':False, 'message':'invalid suggestion id'})
                 
         else:
             return Response(data={'ok':False, 'message': data.errors})

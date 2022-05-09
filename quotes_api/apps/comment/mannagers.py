@@ -17,6 +17,17 @@ class CommentManager(CommentableManager):
         quote.save()
         return comment
     
+    def create_to_suggestion(self, data, suggestion):
+        comment = self.create(
+            content=data['content'],
+            original_suggestion=data['suggestion_id'],
+            date=timezone.now(),
+        )
+        suggestion.comments.append(str(comment._id))
+        suggestion.comments_count += 1
+        suggestion.save()
+        return comment
+    
     def create_to_comment(self, data, to_comment):
         print(data)
         comment = self.create(
