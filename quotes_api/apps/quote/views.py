@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from quotes_api.apps.utils import check_request_param as rp
 from .serializers import *
 from bson import ObjectId
-# Create your views here.
 
 class QuotesCreateView(APIView):
     def post(self, request):
@@ -89,14 +88,16 @@ class QuotesSearch(APIView):
         data=QuotesSearchSerializer(data={
             'query': rp(request ,'query'),
             'device_id': rp(request,'device_id'),
-            'page': rp(request,'page')
+            'page': rp(request,'page'),
+            'each': rp(request,'each'),
         })
         if data.is_valid():
             print(data.validated_data)
             quotes = Quote.objects.search(
                 query=data.validated_data['query'],
                 device_id=data.validated_data['device_id'],
-                page=data.validated_data['page']
+                page=data.validated_data['page'],
+                each=data.validated_data['each'],
             )
             js = QuoteSerializer(quotes, many=True).data
             return Response(data={'ok':True, 'message': 'quotes searching result',

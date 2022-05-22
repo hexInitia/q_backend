@@ -20,9 +20,10 @@ class QuoteManager(CommentableManager):
     def home_quotes(self, device_id, page):
         quotes = self.mongo_aggregate(
             [
+                {'$sort': {'votes': -1}},
                 {'$skip': page * constants.PAGE_SIZE},
                 {'$limit': constants.PAGE_SIZE},
-                {'$sort': {'votes': -1}},
+                
                 queries.votes_projection(device_id)
             ]
         )
@@ -44,11 +45,11 @@ class QuoteManager(CommentableManager):
         
         return quote
     
-    def search(self, query, device_id, page):
+    def search(self, query, device_id, page, each):
         quotes = self.mongo_aggregate(
             [
-                {'$skip': page * constants.PAGE_SIZE},
-                {'$limit': constants.PAGE_SIZE},
+                {'$skip': page * each},
+                {'$limit': each},
                 queries.searc_match(query),
                 queries.votes_projection(device_id)
             ]
