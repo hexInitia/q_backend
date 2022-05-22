@@ -17,9 +17,10 @@ class SuggestionManager(CommentableManager):
     def read(self, device_id, page):
         suggestions = self.mongo_aggregate(
             [
+                {'$sort': {'votes': -1}},
                 {'$skip': page * constants.PAGE_SIZE},
                 {'$limit': constants.PAGE_SIZE},
-                {'$sort': {'votes': -1}},
+                
                 queries.votes_projection(device_id)
             ]
         )
